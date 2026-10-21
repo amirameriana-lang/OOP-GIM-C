@@ -1,94 +1,201 @@
-﻿// game
+﻿// Game
 // Genre : Fighting
-// karakter : nama, kesehatan
+// Karakter : nama, kesehatan, senjata
 
 using System;
-using System.Collections.Generic;
 
-namespace KerangkaGame
+namespace GameFighting
 {
     class Karakter
     {
-        public int totalSenjata, power;
-
+        // Property
         public string nama { get; private set; }
         public int kesehatan { get; private set; }
         public int senjata { get; private set; }
 
-        // Posisi karakter
-        public int posisiAwal { get; private set; }
-        public int posisiSaatIni { get; private set; }
-
-        // membuat constructor
-        public Karakter(string nama, int kesehatan, int senjata, int posisiAwal)
+        // Constructor
+        public Karakter(string nama, int kesehatan, int senjata)
         {
             this.nama = nama;
             this.kesehatan = kesehatan;
             this.senjata = senjata;
-
-            this.posisiAwal = posisiAwal;
-            this.posisiSaatIni = posisiAwal;
         }
 
-        public void Serang(Karakter target)
+        // Method menyerang
+        public void SeranganKe(Karakter lawan)
         {
-            Console.WriteLine("MULAI SERANGAN");
-            target.TerimaSerangan(this.senjata);
+            Console.WriteLine();
+            Console.WriteLine("===== SERANGAN =====");
+
+            lawan.KenaSerang(this.senjata);
         }
 
-        public void TerimaSerangan(int jumlahSerangan)
+        // Method menerima serangan
+        public void KenaSerang(int damage)
         {
-            kesehatan -= jumlahSerangan;
-            Console.WriteLine($"{nama} diserang dengan {jumlahSerangan}. Sisa kesehatan {kesehatan}");
+            kesehatan -= damage;
+
+            if (kesehatan < 0)
+            {
+                kesehatan = 0;
+            }
+
+            Console.WriteLine($"{nama} menerima {damage} damage");
+            Console.WriteLine($"Kesehatan {nama}: {kesehatan}");
         }
 
-        public void PilihanPenyembuhan()
+        // Method penyembuhan
+        public void Pulihkan(int jumlah)
         {
-            Console.WriteLine("Ada Pilihan Penyembuhan ");
-            Console.WriteLine($"Sembuhkan {nama} ?");
-        }
-        public void Aksi(int posisi)
-        {
-            posisiSaatIni = posisi;
+            kesehatan += jumlah;
 
-            Console.WriteLine($"{nama} berpindah dari posisi {posisiAwal} ke posisi {posisiSaatIni}");
-        }
+            if (kesehatan > 100)
+            {
+                kesehatan = 100;
+            }
 
-        public void getData()
-        {
-            Console.WriteLine($"Karakter : {nama}");
-            Console.WriteLine($"Posisi awal : {posisiAwal}");
-            Console.WriteLine($"Posisi saat ini : {posisiSaatIni}");
+            Console.WriteLine();
+            Console.WriteLine($"{nama} memulihkan kesehatan");
+            Console.WriteLine($"Kesehatan sekarang: {kesehatan}");
         }
 
-        public void Healing(int tambahKesehatan)
+        // Menampilkan data karakter
+        public void LihatData()
         {
-            kesehatan += tambahKesehatan;
-            Console.WriteLine($"Disembuhkan {kesehatan}");
+            Console.WriteLine();
+            Console.WriteLine("===== DATA KARAKTER =====");
+            Console.WriteLine($"Nama      : {nama}");
+            Console.WriteLine($"Kesehatan : {kesehatan}");
+            Console.WriteLine($"Senjata   : {senjata}");
+        }
+
+        // Method untuk memilih cara perpindahan
+        public void Gerak(int posisiAwal)
+        {
+            int posisi = posisiAwal;
+
+            Console.WriteLine();
+            Console.WriteLine("===== PILIH CARA BERGERAK =====");
+            Console.WriteLine("1. Tombol Keyboard");
+            Console.WriteLine("2. Input Angka");
+            Console.Write("Pilihanmu (1/2): ");
+
+            string pilihan = Console.ReadLine();
+
+            // Mode keyboard
+            if (pilihan == "1")
+            {
+                Console.WriteLine();
+                Console.WriteLine("===== MODE KEYBOARD =====");
+                Console.WriteLine("Panah Kanan : maju 2");
+                Console.WriteLine("Panah Kiri  : mundur 1");
+                Console.WriteLine("ESC         : keluar");
+                Console.WriteLine($"Posisi awal: {posisi}");
+
+                bool bermain = true;
+
+                while (bermain)
+                {
+                    ConsoleKeyInfo tombol = Console.ReadKey(true);
+
+                    switch (tombol.Key)
+                    {
+                        case ConsoleKey.RightArrow:
+                            posisi += 2;
+                            Console.WriteLine($"Posisi: {posisi}");
+                            break;
+
+                        case ConsoleKey.LeftArrow:
+                            if (posisi > 0)
+                            {
+                                posisi -= 1;
+                            }
+
+                            Console.WriteLine($"Posisi: {posisi}");
+                            break;
+
+                        case ConsoleKey.Escape:
+                            bermain = false;
+                            Console.WriteLine("Mode permainan selesai.");
+                            break;
+                    }
+                }
+            }
+
+            // Mode input angka
+            else if (pilihan == "2")
+            {
+                Console.WriteLine();
+                Console.WriteLine("===== MODE INPUT ANGKA =====");
+
+                bool bermain = true;
+
+                while (bermain)
+                {
+                    Console.Write("Masukkan posisi baru (0 untuk keluar): ");
+
+                    string input = Console.ReadLine();
+
+                    if (!int.TryParse(input, out int posisiBaru))
+                    {
+                        Console.WriteLine("Input harus berupa angka.");
+                        continue;
+                    }
+
+                    if (posisiBaru == 0)
+                    {
+                        bermain = false;
+                        Console.WriteLine("Mode permainan selesai.");
+                        continue;
+                    }
+
+                    if (posisiBaru < 0)
+                    {
+                        Console.WriteLine("Posisi tidak boleh negatif.");
+                        continue;
+                    }
+
+                    posisi = posisiBaru;
+
+                    Console.WriteLine($"Posisi sekarang: {posisi}");
+                }
+            }
+
+            else
+            {
+                Console.WriteLine("Pilihan tidak tersedia.");
+            }
         }
     }
 
-    class MainProgram
+
+    class Program
     {
         static void Main(string[] args)
         {
-            // player utama
-            Karakter player1 = new Karakter("mira", 100, 10, 0);
+            // Membuat karakter
+            Karakter pemain = new Karakter("Amira", 100, 25);
+            Karakter lawan = new Karakter("Ragnar", 100, 15);
 
-            // musuh
-            Karakter musuh = new Karakter("jikra", 100, 100, 10);
+            // Menampilkan data awal
+            Console.WriteLine("===== GAME FIGHTING =====");
 
-            // aksi perpindahan posisi
-            player1.Aksi(5);
+            pemain.LihatData();
+            lawan.LihatData();
 
-            // serangan
-            player1.Serang(musuh);
+            // Pertarungan
+            pemain.SeranganKe(lawan);
 
-            // penyembuhan
-            musuh.Healing(20);
+            lawan.SeranganKe(pemain);
 
-            // menampilkan data
-            player1.getData();
+            // Healing
+            pemain.Pulihkan(15);
+
+            // Memilih cara bergerak
+            pemain.Gerak(0);
+
+            Console.WriteLine();
+            Console.WriteLine("Program selesai.");
         }
     }
 }
