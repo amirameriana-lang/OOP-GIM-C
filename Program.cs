@@ -25,7 +25,7 @@ namespace GameFighting
         public void SeranganKe(Karakter lawan)
         {
             Console.WriteLine();
-            Console.WriteLine("===== SERANGAN =====");
+            Console.WriteLine("SERANGAN");
 
             lawan.KenaSerang(this.senjata);
         }
@@ -63,7 +63,7 @@ namespace GameFighting
         public void LihatData()
         {
             Console.WriteLine();
-            Console.WriteLine("===== DATA KARAKTER =====");
+            Console.WriteLine("DATA KARAKTER");
             Console.WriteLine($"Nama      : {nama}");
             Console.WriteLine($"Kesehatan : {kesehatan}");
             Console.WriteLine($"Senjata   : {senjata}");
@@ -75,7 +75,7 @@ namespace GameFighting
             int posisi = posisiAwal;
 
             Console.WriteLine();
-            Console.WriteLine("===== PILIH CARA BERGERAK =====");
+            Console.WriteLine("PILIH CARA BERGERAK");
             Console.WriteLine("1. Tombol Keyboard");
             Console.WriteLine("2. Input Angka");
             Console.Write("Pilihanmu (1/2): ");
@@ -86,7 +86,7 @@ namespace GameFighting
             if (pilihan == "1")
             {
                 Console.WriteLine();
-                Console.WriteLine("===== MODE KEYBOARD =====");
+                Console.WriteLine("MODE KEYBOARD");
                 Console.WriteLine("Panah Kanan : maju 2");
                 Console.WriteLine("Panah Kiri  : mundur 1");
                 Console.WriteLine("ESC         : keluar");
@@ -126,7 +126,7 @@ namespace GameFighting
             else if (pilihan == "2")
             {
                 Console.WriteLine();
-                Console.WriteLine("===== MODE INPUT ANGKA =====");
+                Console.WriteLine("MODE INPUT ANGKA");
 
                 bool bermain = true;
 
@@ -175,7 +175,7 @@ namespace GameFighting
         {
             // Membuat karakter
             Karakter pemain = new Karakter("Amira", 100, 25);
-            Karakter lawan = new Karakter("Ragnar", 100, 15);
+            Karakter lawan = new Karakter("Jikroo", 100, 15);
 
             // Menampilkan data awal
             Console.WriteLine("===== GAME FIGHTING =====");
